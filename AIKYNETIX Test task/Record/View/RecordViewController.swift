@@ -16,6 +16,8 @@ class RecordViewController: UIViewController {
     private var viewModel = RecordVideoViewModel()
     @Published private var isButtonPressed = false
     
+    var onUpdate: (() -> Void)?
+    
     private(set) lazy var shutButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -65,8 +67,10 @@ class RecordViewController: UIViewController {
                         if duration - 300 > 300 {
                             self.viewModel.cropVideo(sourceURL1: url, statTime: duration - 300, endTime: duration)
                         } else {
+                            self.viewModel.saveToLocal(tempFile: url)
                             self.viewModel.saveVideoToLibrary(videoURL: url)
                         }
+                        self.onUpdate?()
                     }
                 } else {
                     self.shutButton.backgroundColor = .black

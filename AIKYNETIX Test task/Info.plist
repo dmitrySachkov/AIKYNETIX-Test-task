@@ -23,5 +23,7 @@
 	<string>Please allow to record video.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please allow to record audio.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow to use photo library.</string>
 </dict>
 </plist>

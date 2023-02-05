@@ -82,7 +82,7 @@ class CameraService: NSObject {
             return
         }
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let fileUrl = paths[0].appendingPathComponent("output.mp4")
+        let fileUrl = paths[0].appendingPathComponent("output.mov")
         try? FileManager.default.removeItem(at: fileUrl)
         output.startRecording(to: fileUrl, recordingDelegate: self)
         self.videoRecordCompletionBlock = completion
@@ -95,9 +95,9 @@ class CameraService: NSObject {
         }
         self.output.stopRecording()
     }
-    
-    
 }
+
+
 
 //MARK: - Implement AVCaptureFileOutputRecordingDelegate
 extension CameraService: AVCaptureFileOutputRecordingDelegate {

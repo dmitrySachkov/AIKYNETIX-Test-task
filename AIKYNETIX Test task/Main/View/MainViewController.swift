@@ -8,6 +8,8 @@
 import UIKit
 import SnapKit
 import Combine
+import AVKit
+import AVFoundation
 
 class MainViewController: UIViewController {
     
@@ -57,15 +59,20 @@ class MainViewController: UIViewController {
         viewModel.$videos
             .sink { [weak self] videos in
                 guard let self = self else { return }
-                self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
             .store(in: &cancelable)
     }
     
     //MARK: - Set NavigationBar item action
     @objc private func addNewVideoPressed(_ sender: UIBarButtonItem) {
-        print("Add New Video Pressed")
         let recordVC = RecordViewController()
+        recordVC.onUpdate = { [weak self] in
+            guard let self = self else { return }
+            self.viewModel.fetchCoreData()
+        }
         navigationController?.pushViewController(recordVC, animated: true)
     }
 }
@@ -74,19 +81,41 @@ class MainViewController: UIViewController {
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.videos.count
+        return viewModel.videos?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "videoTableViewCell", for: indexPath) as? VideoTableViewCell else { return UITableViewCell() }
-        let video = viewModel.videos[indexPath.row]
-        cell.configureCell(by: video.name, date: video.date)
+        let video = viewModel.videos?[indexPath.row]
+        cell.configureCell(by: video?.name ?? "", date: video?.date ?? "")
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let video = viewModel.videos[indexPath.row]
-        print(video)
+        let video = viewModel.videos?[indexPath.row]
+//        guard let url = video?.data else { return }
+//        print(url)
+//        let fm = FileManager.default
+//        let docURL = try! fm.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+//        let path = docURL.appendingPathComponent(url)
+        guard let url = video?.data else { return }
+//        let player = AVPlayer(url: url)
+////        let player = AVPlayer(url: URL(fileURLWithPath: path.absoluteString))
+//        let vc = AVPlayerViewController()
+//        vc.player = player
+//
+//        present(vc, animated: true) {
+//          vc.player?.play()
+//        }
+        
+//        viewModel.loadData(by: url)
+        let presentationViewModel = PresentationViewModel(video: url)
+        let presentationVC = PresentationVideoViewController(viewModel: presentationViewModel)
+        navigationController?.pushViewController(presentationVC, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
     }
 }

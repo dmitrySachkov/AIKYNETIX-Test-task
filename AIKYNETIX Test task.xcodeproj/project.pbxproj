@@ -21,6 +21,8 @@
 		12B7D77F298D911B00E718D8 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D77E298D911B00E718D8 /* CameraService.swift */; };
 		12B7D7A7298EC86900E718D8 /* RecordVideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D7A6298EC86900E718D8 /* RecordVideoViewModel.swift */; };
 		12B7D7A9298ED2A300E718D8 /* CoreDataPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D7A8298ED2A300E718D8 /* CoreDataPublisher.swift */; };
+		12B7D7AD298EF76400E718D8 /* PresentationVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D7AC298EF76400E718D8 /* PresentationVideoViewController.swift */; };
+		12B7D7B1298EF7F300E718D8 /* PresentationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D7B0298EF7F300E718D8 /* PresentationViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		12B7D77E298D911B00E718D8 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		12B7D7A6298EC86900E718D8 /* RecordVideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewModel.swift; sourceTree = "<group>"; };
 		12B7D7A8298ED2A300E718D8 /* CoreDataPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPublisher.swift; sourceTree = "<group>"; };
+		12B7D7AC298EF76400E718D8 /* PresentationVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationVideoViewController.swift; sourceTree = "<group>"; };
+		12B7D7B0298EF7F300E718D8 /* PresentationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,7 @@
 				12B7D755298D78DF00E718D8 /* SceneDelegate.swift */,
 				12B7D778298D8E8700E718D8 /* Main */,
 				12B7D777298D8E6300E718D8 /* Record */,
+				12B7D7AE298EF76C00E718D8 /* VideoPresentation */,
 				12B7D75F298D78E300E718D8 /* Assets.xcassets */,
 				12B7D761298D78E300E718D8 /* LaunchScreen.storyboard */,
 				12B7D764298D78E300E718D8 /* Info.plist */,
@@ -162,6 +167,31 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		12B7D7AE298EF76C00E718D8 /* VideoPresentation */ = {
+			isa = PBXGroup;
+			children = (
+				12B7D7AF298EF78300E718D8 /* View */,
+				12B7D7B2298EF80F00E718D8 /* ViewModel */,
+			);
+			path = VideoPresentation;
+			sourceTree = "<group>";
+		};
+		12B7D7AF298EF78300E718D8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				12B7D7AC298EF76400E718D8 /* PresentationVideoViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		12B7D7B2298EF80F00E718D8 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				12B7D7B0298EF7F300E718D8 /* PresentationViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -244,11 +274,13 @@
 				12B7D7A7298EC86900E718D8 /* RecordVideoViewModel.swift in Sources */,
 				12B7D77C298D8EC600E718D8 /* RecordViewController.swift in Sources */,
 				12B7D758298D78DF00E718D8 /* MainViewController.swift in Sources */,
+				12B7D7B1298EF7F300E718D8 /* PresentationViewModel.swift in Sources */,
 				12B7D7A9298ED2A300E718D8 /* CoreDataPublisher.swift in Sources */,
 				12B7D754298D78DF00E718D8 /* AppDelegate.swift in Sources */,
 				12B7D75E298D78DF00E718D8 /* AIKYNETIX_Test_task.xcdatamodeld in Sources */,
 				12B7D756298D78DF00E718D8 /* SceneDelegate.swift in Sources */,
 				12B7D77F298D911B00E718D8 /* CameraService.swift in Sources */,
+				12B7D7AD298EF76400E718D8 /* PresentationVideoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
