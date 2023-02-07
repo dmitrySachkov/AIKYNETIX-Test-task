@@ -10,9 +10,9 @@ import Combine
 
 class PresentationViewModel: ObservableObject {
     
-    var video: URL
+    var video: String
     
-    init(video: URL) {
+    init(video: String) {
         self.video = video
     }
 }

@@ -67,7 +67,6 @@ class RecordViewController: UIViewController {
                         if duration - 300 > 300 {
                             self.viewModel.cropVideo(sourceURL1: url, statTime: duration - 300, endTime: duration)
                         } else {
-                            self.viewModel.saveToLocal(tempFile: url)
                             self.viewModel.saveVideoToLibrary(videoURL: url)
                         }
                         self.onUpdate?()

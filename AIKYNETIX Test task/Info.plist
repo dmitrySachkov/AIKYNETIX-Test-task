@@ -19,11 +19,9 @@
 			</array>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Please allow to record video.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Please allow to record audio.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Please allow to use photo library.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>

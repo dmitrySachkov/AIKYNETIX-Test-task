@@ -40,16 +40,17 @@ class RecordVideoViewModel: ObservableObject {
         cameraService.checkPermission()
     }
     
-    
-    func saveToLocal(tempFile: URL) {
+    //MARK: - Save video
+    func saveVideoToLibrary(videoURL: URL) {
+        
         guard let folderURL = URL.createFolder(folderName: "StoredVideos") else {
             print("Can't create url")
             return
         }
-        let name = tempFile.lastPathComponent
+        let name = "\(UUID().uuidString)" + ".mov"
         let permanentFileURL = folderURL.appendingPathComponent(name)
         do {
-            let videoData = try Data(contentsOf: tempFile)
+            let videoData = try Data(contentsOf: videoURL)
             try videoData.write(to: permanentFileURL, options: .atomic)
         } catch {
             print(error.localizedDescription)
@@ -57,29 +58,9 @@ class RecordVideoViewModel: ObservableObject {
         
         let context = persistentContainer.viewContext
         
-        let newVideo = NSEntityDescription.insertNewObject(forEntityName: "Videos", into: context) as! Videos
-        newVideo.name = "Test"
-        newVideo.date = getDate()
-        newVideo.data = permanentFileURL.path()
-        
-        do {
-            try context.save()
-            print("Video save to data base")
-            self.isSaved = true
-            self.cameraService.session?.stopRunning()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    //MARK: - Save video
-    func saveVideoToLibrary(videoURL: URL) {
-        let context = persistentContainer.viewContext
-        
         let newVideo = NSEntityDescription.insertNewObject(forEntityName: "Video", into: context) as! Video
-        newVideo.name = "Test"
+        newVideo.name = name
         newVideo.date = getDate()
-        newVideo.data = videoURL
         
         do {
             try context.save()
@@ -89,19 +70,6 @@ class RecordVideoViewModel: ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
-        
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL) }) { [weak self] saved, error in
-                guard let self = self else { return }
-                if let error = error {
-                    print("Error saving video to library: \(error.localizedDescription)")
-                }
-                if saved {
-                    print("Video save to library")
-                    self.isSaved = true
-                    self.cameraService.session?.stopRunning()
-                }
-            }
     }
     
     //MARK: - Crop the video
@@ -145,7 +113,6 @@ class RecordVideoViewModel: ObservableObject {
                case .completed:
                    print("exported at \(outputURL)")
                    self.saveVideoToLibrary(videoURL: outputURL)
-                   self.saveToLocal(tempFile: outputURL)
                case .failed:
                    print("failed \(String(describing: exportSession.error))")
 

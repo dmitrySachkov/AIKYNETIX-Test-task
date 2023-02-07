@@ -6,7 +6,6 @@
         <attribute name="name" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES"/>
     </entity>
     <entity name="Videos" representedClassName="Videos" syncable="YES" codeGenerationType="class">
-        <attribute name="data" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>

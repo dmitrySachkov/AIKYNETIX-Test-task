@@ -72,6 +72,7 @@ class MainViewController: UIViewController {
         recordVC.onUpdate = { [weak self] in
             guard let self = self else { return }
             self.viewModel.fetchCoreData()
+            self.viewModel.fetchSecondCoreData()
         }
         navigationController?.pushViewController(recordVC, animated: true)
     }
@@ -93,24 +94,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        let video = viewModel.videos?[indexPath.row]
-//        guard let url = video?.data else { return }
-//        print(url)
-//        let fm = FileManager.default
-//        let docURL = try! fm.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let path = docURL.appendingPathComponent(url)
-        guard let url = video?.data else { return }
-//        let player = AVPlayer(url: url)
-////        let player = AVPlayer(url: URL(fileURLWithPath: path.absoluteString))
-//        let vc = AVPlayerViewController()
-//        vc.player = player
-//
-//        present(vc, animated: true) {
-//          vc.player?.play()
-//        }
-        
-//        viewModel.loadData(by: url)
-        let presentationViewModel = PresentationViewModel(video: url)
+        guard let data = viewModel.videos?[indexPath.row]  else { return }
+        print("???? - urlPath in main is \(data.name)")
+        let presentationViewModel = PresentationViewModel(video: data.name ?? "")
         let presentationVC = PresentationVideoViewController(viewModel: presentationViewModel)
         navigationController?.pushViewController(presentationVC, animated: true)
     }

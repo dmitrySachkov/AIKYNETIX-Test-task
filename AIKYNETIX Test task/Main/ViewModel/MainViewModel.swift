@@ -10,10 +10,15 @@ import Combine
 import CoreData
 import Photos
 
+struct VideoSaved {
+    var name: String
+}
+
 
 class MainViewModel: ObservableObject {
     
     @Published var videos: Array<VideoModel>?
+    @Published var secondVideos: Array<VideoSaved>?
     private var cancelable = Set<AnyCancellable>()
     private var currentVideo: PHAsset?
     
@@ -30,6 +35,7 @@ class MainViewModel: ObservableObject {
     
     init() {
         fetchCoreData()
+        fetchSecondCoreData()
     }
     
     func fetchCoreData() {
@@ -45,12 +51,16 @@ class MainViewModel: ObservableObject {
             .store(in: &cancelable)
     }
     
-    func loadData(by name: String) -> URL {
-        let fm = FileManager.default
-        let docURL = try! fm.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let path = docURL.appendingPathComponent(name)
-        
-        print(URL(fileURLWithPath: path.absoluteString))
-        return URL(fileURLWithPath: path.absoluteString)
+    func fetchSecondCoreData() {
+        self.secondVideos = []
+        let fetch = NSFetchRequest<Videos>(entityName: "Videos")
+        CoreDataPublisher(request: fetch, context: persistentContainer.viewContext)
+            .map { $0.map { VideoSaved(name: $0.name ?? "") } }
+            .sink(receiveCompletion: { _ in
+            }, receiveValue: { [weak self] videos in
+                guard let self = self else { return }
+                self.secondVideos?.append(contentsOf: videos)
+            })
+            .store(in: &cancelable)
     }
 }

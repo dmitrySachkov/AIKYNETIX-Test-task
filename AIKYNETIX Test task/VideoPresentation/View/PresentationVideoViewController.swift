@@ -29,7 +29,6 @@ class PresentationVideoViewController: UIViewController {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         return button
     }()
@@ -51,9 +50,17 @@ class PresentationVideoViewController: UIViewController {
         binding()
     }
     
+    //MARK: - Setup UI Elements
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        player = AVPlayer(url: viewModel.video)
+        let fm = FileManager.default
+        guard let folderURL = URL.createFolder(folderName: "StoredVideos") else {
+            print("Can't create url")
+            return
+        }
+        let name = viewModel.video
+        let permanentFileURL = folderURL.appendingPathComponent(name)
+        player = AVPlayer(url: permanentFileURL)
         let layer = AVPlayerLayer(player: player)
         view.layer.addSublayer(layer)
         layer.frame = view.bounds
@@ -68,15 +75,7 @@ class PresentationVideoViewController: UIViewController {
         }
     }
     
-//    private func setPlayer(view: UIView) {
-//        player = AVPlayer(url: viewModel.video)
-//        let layer = AVPlayerLayer(player: player)
-//        view.layer.addSublayer(layer)
-//        layer.frame = view.bounds
-//        layer.videoGravity = .resizeAspectFill
-//        player?.volume = 0
-//    }
-    
+    //MARK: - Setup button
     private func setButton() {
         if isPressed {
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
@@ -87,6 +86,7 @@ class PresentationVideoViewController: UIViewController {
         }
     }
     
+    //MARK: - binding data
     private func binding() {
         $isPressed
             .sink { [weak self] isPressed in
@@ -96,6 +96,7 @@ class PresentationVideoViewController: UIViewController {
             .store(in: &cancelable)
     }
     
+    //MARK: - Handled button press
     @objc private func buttonPressed(_ sender: UIButton) {
         isPressed.toggle()
     }
