@@ -9,12 +9,18 @@ import UIKit
 import AVFoundation
 import Combine
 import Photos
+import FirebaseCrashlytics
 
 class RecordViewController: UIViewController {
 
     private var cancelable = Set<AnyCancellable>()
     private var viewModel = RecordVideoViewModel()
     @Published private var isButtonPressed = false
+    
+    let minimumZoom: CGFloat = 1.0
+    let maximumZoom: CGFloat = 5.0
+    var lastZoomFactor: CGFloat = 1.0
+    var newCamera: AVCaptureDevice?
     
     var onUpdate: (() -> Void)?
     
@@ -32,6 +38,11 @@ class RecordViewController: UIViewController {
 
         setupUI()
         binding()
+        
+        newCamera = cameraWithPosition(position: .back)
+        //Add Pinch Gesture on CameraView.
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action:#selector(pinch(_:)))
+        view.addGestureRecognizer(pinchRecognizer)
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,6 +63,16 @@ class RecordViewController: UIViewController {
         shutButton.layoutIfNeeded()
         shutButton.layer.cornerRadius = shutButton.frame.width / 2
     }
+    
+    func cameraWithPosition(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+          let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
+          for device in discoverySession.devices {
+                if device.position == position {
+                    return device
+                }
+           }
+           return nil
+      }
     
     //MARK: - Set Binding
     private func binding() {
@@ -93,6 +114,38 @@ class RecordViewController: UIViewController {
     
     //MARK: - Button pressed
     @objc private func shutButtonPressed(_ sender: UIButton) {
+        let numbers = [0]
+        let _ = numbers[1]
         isButtonPressed.toggle()
+    }
+    
+    @objc func pinch(_ pinch: UIPinchGestureRecognizer) {
+        guard let device = newCamera else { return }
+        
+        // Return zoom value between the minimum and maximum zoom values
+        func minMaxZoom(_ factor: CGFloat) -> CGFloat {
+            return min(min(max(factor, minimumZoom), maximumZoom), device.activeFormat.videoMaxZoomFactor)
+        }
+        
+        func update(scale factor: CGFloat) {
+            do {
+                try device.lockForConfiguration()
+                defer { device.unlockForConfiguration() }
+                device.videoZoomFactor = factor
+            } catch {
+                print("\(error.localizedDescription)")
+            }
+        }
+        
+        let newScaleFactor = minMaxZoom(pinch.scale * lastZoomFactor)
+        
+        switch pinch.state {
+        case .began: fallthrough
+        case .changed: update(scale: newScaleFactor)
+        case .ended:
+            lastZoomFactor = minMaxZoom(newScaleFactor)
+            update(scale: lastZoomFactor)
+        default: break
+        }
     }
 }
