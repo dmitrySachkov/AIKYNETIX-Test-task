@@ -10,17 +10,20 @@ import AVFoundation
 import Combine
 import Photos
 import FirebaseCrashlytics
+import CoreML
 
 class RecordViewController: UIViewController {
 
     private var cancelable = Set<AnyCancellable>()
     private var viewModel = RecordVideoViewModel()
+    var zoomScaleRange: ClosedRange<CGFloat> = 1...10
     @Published private var isButtonPressed = false
     
     let minimumZoom: CGFloat = 1.0
     let maximumZoom: CGFloat = 5.0
     var lastZoomFactor: CGFloat = 1.0
-    var newCamera: AVCaptureDevice?
+    var currentDevice: AVCaptureDevice?
+    private var initialScale: CGFloat = 0
     
     var onUpdate: (() -> Void)?
     
@@ -39,9 +42,10 @@ class RecordViewController: UIViewController {
         setupUI()
         binding()
         
-        newCamera = cameraWithPosition(position: .back)
+        currentDevice = viewModel.cameraService.device
         //Add Pinch Gesture on CameraView.
-        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action:#selector(pinch(_:)))
+        print("newScaleFactor deviceType \(currentDevice?.deviceType)")
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action:#selector(handlePinch(_:)))
         view.addGestureRecognizer(pinchRecognizer)
     }
     
@@ -65,14 +69,18 @@ class RecordViewController: UIViewController {
     }
     
     func cameraWithPosition(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-          let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
-          for device in discoverySession.devices {
-                if device.position == position {
-                    return device
-                }
-           }
-           return nil
-      }
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTripleCamera,
+                                                                              .builtInDualWideCamera,
+                                                                              .builtInDualCamera,
+                                                                              .builtInWideAngleCamera],
+                                                                mediaType: AVMediaType.video,
+                                                                position: .back)
+        for device in discoverySession.devices {
+            print("newScaleFactor cameraWithPosition \(device.deviceType)")
+            return device
+        }
+        return nil
+    }
     
     //MARK: - Set Binding
     private func binding() {
@@ -114,19 +122,17 @@ class RecordViewController: UIViewController {
     
     //MARK: - Button pressed
     @objc private func shutButtonPressed(_ sender: UIButton) {
-        let numbers = [0]
-        let _ = numbers[1]
         isButtonPressed.toggle()
     }
     
     @objc func pinch(_ pinch: UIPinchGestureRecognizer) {
-        guard let device = newCamera else { return }
-        
+        guard let device = currentDevice else { return }
+
         // Return zoom value between the minimum and maximum zoom values
         func minMaxZoom(_ factor: CGFloat) -> CGFloat {
             return min(min(max(factor, minimumZoom), maximumZoom), device.activeFormat.videoMaxZoomFactor)
         }
-        
+
         func update(scale factor: CGFloat) {
             do {
                 try device.lockForConfiguration()
@@ -136,9 +142,9 @@ class RecordViewController: UIViewController {
                 print("\(error.localizedDescription)")
             }
         }
-        
+
         let newScaleFactor = minMaxZoom(pinch.scale * lastZoomFactor)
-        
+
         switch pinch.state {
         case .began: fallthrough
         case .changed: update(scale: newScaleFactor)
@@ -147,5 +153,65 @@ class RecordViewController: UIViewController {
             update(scale: lastZoomFactor)
         default: break
         }
+    }
+    
+    @objc
+    private func handlePinch(_ pinch: UIPinchGestureRecognizer) {
+        guard let device = currentDevice else { return }
+
+        switch pinch.state {
+        case .began:
+            initialScale = device.videoZoomFactor
+        case .changed:
+            let minAvailableZoomScale = device.minAvailableVideoZoomFactor
+            let maxAvailableZoomScale = device.maxAvailableVideoZoomFactor
+            let availableZoomScaleRange = minAvailableZoomScale...maxAvailableZoomScale
+            let resolvedZoomScaleRange = zoomScaleRange.clamped(to: availableZoomScaleRange)
+
+            let resolvedScale = max(resolvedZoomScaleRange.lowerBound, min(pinch.scale * initialScale, resolvedZoomScaleRange.upperBound))
+            let zoomLevelValue = String(format: "%.1f", resolvedScale)
+            print("testZoom \(zoomLevelValue)")
+//            zoomLabel.text = zoomLevelValue
+            configCamera(device) { device in
+                device.videoZoomFactor = resolvedScale
+            }
+        default:
+            return
+        }
+    }
+    
+    private func configCamera(_ camera: AVCaptureDevice?, _ config: @escaping (AVCaptureDevice) -> ()) {
+        guard let device = currentDevice else { return }
+        do {
+            try device.lockForConfiguration()
+            if device.isFocusModeSupported(.continuousAutoFocus) {
+                device.focusMode = .continuousAutoFocus
+            }
+            if device.isExposureModeSupported(.continuousAutoExposure) {
+                device.exposureMode = .continuousAutoExposure
+            }
+            if device.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) {
+                device.whiteBalanceMode = .continuousAutoWhiteBalance
+            }
+            if device.isSmoothAutoFocusSupported {
+                device.isSmoothAutoFocusEnabled = true
+            }
+            device.isSubjectAreaChangeMonitoringEnabled = true
+
+            if device.isLowLightBoostSupported {
+                device.automaticallyEnablesLowLightBoostWhenAvailable = true
+            }
+            if device.isGeometricDistortionCorrectionSupported {
+                device.isGeometricDistortionCorrectionEnabled = true
+            }
+        } catch {
+            return
+        }
+        config(device)
+        device.unlockForConfiguration()
+      }
+    
+    private func getSuperResolution() {
+        
     }
 }

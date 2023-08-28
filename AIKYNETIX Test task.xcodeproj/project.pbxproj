@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1233D2AF2A0E60EA00F35DBE /* QuickPoseCamera in Frameworks */ = {isa = PBXBuildFile; productRef = 1233D2AE2A0E60EA00F35DBE /* QuickPoseCamera */; };
+		1233D2B12A0E60EA00F35DBE /* QuickPoseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1233D2B02A0E60EA00F35DBE /* QuickPoseCore */; };
+		1233D2B32A0E60EA00F35DBE /* QuickPoseMP in Frameworks */ = {isa = PBXBuildFile; productRef = 1233D2B22A0E60EA00F35DBE /* QuickPoseMP */; };
+		123729792A84D41100CB5D25 /* aesrgan.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 123729782A84D41100CB5D25 /* aesrgan.mlmodel */; };
 		124BBB3529E9A19300DDDF4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 124BBB3429E9A19300DDDF4C /* GoogleService-Info.plist */; };
 		12B7D754298D78DF00E718D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D753298D78DF00E718D8 /* AppDelegate.swift */; };
 		12B7D756298D78DF00E718D8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B7D755298D78DF00E718D8 /* SceneDelegate.swift */; };
@@ -31,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		123729782A84D41100CB5D25 /* aesrgan.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = aesrgan.mlmodel; sourceTree = "<group>"; };
 		124BBB3429E9A19300DDDF4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		12B7D750298D78DF00E718D8 /* AIKYNETIX Test task.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AIKYNETIX Test task.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12B7D753298D78DF00E718D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,7 +62,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				12E5C6D229E86CCB00536E6C /* FirebaseAnalyticsSwift in Frameworks */,
+				1233D2B12A0E60EA00F35DBE /* QuickPoseCore in Frameworks */,
 				12E5C6D429E86CCB00536E6C /* FirebaseCrashlytics in Frameworks */,
+				1233D2AF2A0E60EA00F35DBE /* QuickPoseCamera in Frameworks */,
+				1233D2B32A0E60EA00F35DBE /* QuickPoseMP in Frameworks */,
 				12E5C6D629E86CCB00536E6C /* FirebasePerformance in Frameworks */,
 				12E5C6D029E86CCB00536E6C /* FirebaseAnalytics in Frameworks */,
 				12B7D776298D802400E718D8 /* SnapKit in Frameworks */,
@@ -86,6 +94,7 @@
 		12B7D752298D78DF00E718D8 /* AIKYNETIX Test task */ = {
 			isa = PBXGroup;
 			children = (
+				123729782A84D41100CB5D25 /* aesrgan.mlmodel */,
 				12B7D753298D78DF00E718D8 /* AppDelegate.swift */,
 				12B7D755298D78DF00E718D8 /* SceneDelegate.swift */,
 				124BBB3429E9A19300DDDF4C /* GoogleService-Info.plist */,
@@ -226,6 +235,9 @@
 				12E5C6D129E86CCB00536E6C /* FirebaseAnalyticsSwift */,
 				12E5C6D329E86CCB00536E6C /* FirebaseCrashlytics */,
 				12E5C6D529E86CCB00536E6C /* FirebasePerformance */,
+				1233D2AE2A0E60EA00F35DBE /* QuickPoseCamera */,
+				1233D2B02A0E60EA00F35DBE /* QuickPoseCore */,
+				1233D2B22A0E60EA00F35DBE /* QuickPoseMP */,
 			);
 			productName = "AIKYNETIX Test task";
 			productReference = 12B7D750298D78DF00E718D8 /* AIKYNETIX Test task.app */;
@@ -258,6 +270,7 @@
 			packageReferences = (
 				12B7D774298D802400E718D8 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				12E5C6CE29E86CCA00536E6C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1233D2AD2A0E60EA00F35DBE /* XCRemoteSwiftPackageReference "quickpose-ios-sdk" */,
 			);
 			productRefGroup = 12B7D751298D78DF00E718D8 /* Products */;
 			projectDirPath = "";
@@ -314,6 +327,7 @@
 				12B7D7A7298EC86900E718D8 /* RecordVideoViewModel.swift in Sources */,
 				12B7D77C298D8EC600E718D8 /* RecordViewController.swift in Sources */,
 				12B7D758298D78DF00E718D8 /* MainViewController.swift in Sources */,
+				123729792A84D41100CB5D25 /* aesrgan.mlmodel in Sources */,
 				12B7D7B1298EF7F300E718D8 /* PresentationViewModel.swift in Sources */,
 				12B7D7A9298ED2A300E718D8 /* CoreDataPublisher.swift in Sources */,
 				12B7D754298D78DF00E718D8 /* AppDelegate.swift in Sources */,
@@ -461,7 +475,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5YZEB9WTWN;
+				DEVELOPMENT_TEAM = C83M457MPL;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AIKYNETIX Test task/Info.plist";
@@ -494,7 +508,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5YZEB9WTWN;
+				DEVELOPMENT_TEAM = C83M457MPL;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AIKYNETIX Test task/Info.plist";
@@ -544,6 +558,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1233D2AD2A0E60EA00F35DBE /* XCRemoteSwiftPackageReference "quickpose-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/quickpose/quickpose-ios-sdk.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		12B7D774298D802400E718D8 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -563,6 +585,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1233D2AE2A0E60EA00F35DBE /* QuickPoseCamera */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1233D2AD2A0E60EA00F35DBE /* XCRemoteSwiftPackageReference "quickpose-ios-sdk" */;
+			productName = QuickPoseCamera;
+		};
+		1233D2B02A0E60EA00F35DBE /* QuickPoseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1233D2AD2A0E60EA00F35DBE /* XCRemoteSwiftPackageReference "quickpose-ios-sdk" */;
+			productName = QuickPoseCore;
+		};
+		1233D2B22A0E60EA00F35DBE /* QuickPoseMP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1233D2AD2A0E60EA00F35DBE /* XCRemoteSwiftPackageReference "quickpose-ios-sdk" */;
+			productName = QuickPoseMP;
+		};
 		12B7D775298D802400E718D8 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 12B7D774298D802400E718D8 /* XCRemoteSwiftPackageReference "SnapKit" */;
