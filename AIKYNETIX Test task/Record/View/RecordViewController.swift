@@ -181,6 +181,7 @@ class RecordViewController: UIViewController {
     }
     
     private func configCamera(_ camera: AVCaptureDevice?, _ config: @escaping (AVCaptureDevice) -> ()) {
+        print("test")
         guard let device = currentDevice else { return }
         do {
             try device.lockForConfiguration()
